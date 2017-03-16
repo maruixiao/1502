@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播</title>
+</head>
+<style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	li{
+		list-style: none;
+	}
+	#div1{
+		min-width: 1000px;
+		height: 360px;
+		position: relative;
+		overflow: hidden;
+	}
+	#div1 ul{
+		position: absolute;
+		left: 0;
+	}
+	#div1 ul li{
+		float: left;
+	}
+	#div1 ul li img{
+		position: relative;
+		left: 0;
+	}
+	#btn{
+		position: absolute;
+		width: 100%;
+		text-align:center;
+		bottom: 0; 	
+	}
+	#btn a{
+		cursor: pointer;
+		display: inline-block;
+		width: 11px;		
+		height:11px;
+		background:red;
+	}
+	#btn a.active{
+		background: white;
+	}	
+	#btn a:hover{
+		background:white; 
+	}
+</style>
+<script>
+	  window.onload= function () {
+          var odiv=document.getElementById('div1');
+          var oul=odiv.getElementsByTagName('ul')[0];
+          var ali=oul.getElementsByTagName('li');
+          var aimg=oul.getElementsByTagName('img');
+          var obtn=document.getElementById('btn');
+          var aA=obtn.getElementsByTagName('a');
+          var inow=0;
+          var inow2=0;
+          var timer=null;
+
+          var imgwidth=1920;
+          oul.style.width=aimg.length*imgwidth+'px';
+
+          function toCenter(){
+               var viewWidth=document.documentElement.clientWidth;
+               if(viewWidth>1000){
+                    for(var i=0;i<aimg.length;i++){
+                           aimg[i].style.left=-(imgwidth-viewWidth)/2+'px';
+                    }
+               }
+          }
+          toCenter();
+          window.onresize= function () {
+              toCenter();
+          };
+
+          for(var i=0;i<aA.length;i++){
+               aA[i].index=i;
+               aA[i].onclick= function () {
+                    for(var i=0;i<aA.length;i++){
+                         aA[i].className='';
+                    }
+                   this.className='active';
+                   domove(oul,100,-this.index*imgwidth,'left');
+               };
+          }
+          timer=setInterval(torun,3000);
+          function torun(){
+              if(inow==ali.length-1){
+                  ali[0].style.position='relative';
+                  ali[0].style.left=ali.length*imgwidth+'px';
+                  inow=0;
+              }else{
+                  inow++;
+              }
+              inow2++;
+
+               for(var i=0;i<aA.length;i++){
+                     aA[i].className='';
+               }
+               aA[inow].className='active';
+
+
+              domove(oul,100,-inow2*imgwidth,'left', function () {
+                   if(inow==0){
+                       ali[0].style.position='static';
+                       oul.style.left=0;
+                       inow2=0;
+                   }
+              });
+          }
+
+          oul.onmouseover= function () {
+             clearInterval(timer);
+          };
+          oul.onmouseout= function () {
+              timer=setInterval(torun,3000);
+          };
+
+          function domove(obj,dir,itarget,attr,fn){
+              dir=parseInt(getByClass(obj,attr))<itarget?dir:-dir;
+              clearInterval(obj.timer);
+              obj.timer=setInterval(function () {
+                  var speed=parseInt(getByClass(obj,attr))+dir;
+                  if(speed>=itarget && dir>0){
+                      speed=itarget;
+                  }
+                  if(speed<=itarget && dir<0){
+                      speed=itarget;
+                  }
+                  obj.style[attr]=speed+'px';
+                  if(speed==itarget){
+                      clearInterval(obj.timer);
+                      if(fn){
+                          fn();
+                      }
+                  }
+              },30);
+          }
+          function getByClass(obj,attr){
+              if(obj.currentStyle){
+                  return obj.currentStyle[attr];
+              }else{
+                  return getComputedStyle(obj)[attr];
+              }
+          }
+      };
+</script>
+<body>
+</body>
+<div id="div1">
+    <ul>
+        <li><img src="./img/1.jpg" alt=""></li>
+        <li><img src="./img/2.jpg" alt=""></li>
+        <li><img src="./img/3.jpg" alt=""></li>
+    </ul>
+    <div id="btn">
+        <a href="javascript:;" class="active"></a>
+        <a href="javascript:;" ></a>
+        <a href="javascript:;" ></a>
+    </div>
+</div>
+</html>

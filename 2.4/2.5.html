@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            position: absolute;
+            height: 100%;
+        }
+        #myBox{
+            width: 50%;
+            margin: 0 auto;
+        }
+        #myBox img{
+            width: 25%;
+            height: auto;
+            float: left;
+        }
+        #shade{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            display: none;
+        }
+        #shade button{
+            background: none;
+            border: none;
+            position: absolute;
+        }
+        #myImg{
+            width: 300px;
+            height: auto;
+            padding-top: 20px;
+            margin: 0 auto;
+            position: relative;
+            top: 50%;
+            margin-top: -160px;
+        }
+        #off{
+            right: 0;
+            top: 0;
+        }
+        #left{
+            left: 10px;
+            top:50%
+        }
+        #right{
+            right: 10px;
+            top:50%
+        }
+    </style>
+</head>
+<body>
+    <div id="myBox">
+        <img src="./img1/0.jpg" alt="">
+        <img src="./img1/1.jpg" alt="">
+        <img src="./img1/2.jpg" alt="">
+        <img src="./img1/3.jpg" alt="">
+        <img src="./img1/4.jpg" alt="">
+        <img src="./img1/5.jpg" alt="">
+        <img src="./img1/6.jpg" alt="">
+        <img src="./img1/7.jpg" alt="">
+        <img src="./img1/8.jpg" alt="">
+        <img src="./img1/9.jpg" alt="">
+        <img src="./img1/10.jpg" alt="">
+        <img src="./img1/11.jpg">
+    </div>
+    <div id="shade">
+           <button id="left"></button>
+           <button id="right"></button>
+               <div id="myImg">
+                  <img id="maxImg" src="./img1/1.jpg" alt="">
+                  <button id="off">X</button>
+               </div>
+    </div>
+</body>
+<script>
+    var myBox = document.getElementById("myBox");
+    var shade = document.getElementById("shade");
+    var off = document.getElementById("off");
+    var left = document.getElementById("left");
+    var right = document.getElementById("right");
+    var myImg = document.getElementById("myImg");
+    var maxImg = document.getElementById("maxImg");
+    var minImg = myBox.getElementsByTagName("img");
+    var num = 0;
+    for(var i = 0; i < minImg.length;i++){
+        minImg[i].index = i;
+    }
+    myBox.addEventListener("click",function (e) {
+        shade.style.display = "block";
+        maxImg.src = e.target.src;
+        num = e.target.index;
+    });
+    off.onclick = function () {
+        shade.style.display = "none";
+    };
+    left.onclick = function () {
+        if(num > 0 ){
+            num--;
+            maxImg.src = "./img1"+num+".jpg";
+        }
+    };
+    right.onclick = function () {
+        if(num < minImg.length-1 ){
+            num++;
+            maxImg.src = "./img1"+num+".jpg";
+        }
+    };
+    document.onkeydown = function (e) {
+        var event = e || window.event;
+        if(event.keyCode == 37){
+            left.onclick();
+        }else if(event.keyCode == 39){
+            right.onclick();
+        }
+    }
+</script>
+<ml>
